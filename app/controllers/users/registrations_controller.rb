@@ -1,24 +1,29 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   before_action :configure_sign_up_params, only: [:create]
-
   respond_to :json
+
+  rescue_from ActiveRecord::RecordNotUnique, with: :handle_duplicate_email
 
   private
 
+  def handle_duplicate_email
+    render json: {
+      error: 'Email already taken',
+      status: {code: 422, message: "unprocessable entity"}
+    }
+  end
+
   def respond_with(resource, _opts = {})
-    if resource.persisted?
-      register_success
+    if resource.persisted? 
+      render json: {
+        status: { code: 200, message: 'Registered successfully.' },
+        user: resource,
+      }
     else
-      register_failed
+      render json: {
+        status: { message: "User couldn't be created successfully. #{resource.errors.full_messages.to_sentence}" }
+      }, status: :unprocessable_entity
     end
-  end
-
-  def register_success
-    render json: { message: 'Signed up.',  current_user: resource}
-  end
-
-  def register_failed
-    render json: { message: "Signed up failure.  #{resource.errors.full_messages.to_sentence}" }
   end
 
   protected

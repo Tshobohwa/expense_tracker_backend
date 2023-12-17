@@ -10,6 +10,7 @@ devise_for :users,
       resources :expenses, only: :index
       resources :incomes, only: :index
       resources :users
+      resources :categories, only: :index
     end
   end
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html

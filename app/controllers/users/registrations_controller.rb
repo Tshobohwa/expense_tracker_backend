@@ -1,4 +1,5 @@
 class Users::RegistrationsController < Devise::RegistrationsController
+  skip_before_action :verify_authenticity_token
   before_action :configure_sign_up_params, only: [:create]
   respond_to :json
 
@@ -15,9 +16,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   def respond_with(resource, _opts = {})
     if resource.persisted? 
+      token = JWT.encode({ user_id: resource.id }, Rails.application.secrets.secret_key_base)
       render json: {
         status: { code: 200, message: 'Registered successfully.' },
         user: resource,
+        token: token
       }
     else
       render json: {

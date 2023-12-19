@@ -9,7 +9,9 @@ devise_for :users,
       resources :transactions
       resources :expenses, only: :index
       resources :incomes, only: :index
-      resources :users
+      resources :users do
+        resources :transactions
+      end
       resources :categories, only: :index
     end
   end

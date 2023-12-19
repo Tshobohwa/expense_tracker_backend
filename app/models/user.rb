@@ -10,4 +10,8 @@ class User < ApplicationRecord
   validates :last_name, presence: true
   validates :email, presence: true
   has_many :transactions, foreign_key: :user_id
+
+  def jwt_payload
+    { 'user_id' => self.id }
+  end
 end

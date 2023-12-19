@@ -15,12 +15,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
   end
 
   def respond_with(resource, _opts = {})
-    if resource.persisted? 
-      token = JWT.encode({ user_id: resource.id }, Rails.application.secrets.secret_key_base)
+    if resource.persisted?
       render json: {
         status: { code: 200, message: 'Registered successfully.' },
         user: resource,
-        token: token
       }
     else
       render json: {

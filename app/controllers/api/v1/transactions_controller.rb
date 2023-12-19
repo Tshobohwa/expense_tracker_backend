@@ -1,14 +1,28 @@
 class Api::V1::TransactionsController < ApplicationController
-    before_action :authenticate_user!
+    skip_before_action :verify_authenticity_token
     def index
-        render json: { current_user: ""}
+        user_id = params[:user_id]
+        @transactions = Transaction.where({user_id: user_id})
+        render json: { message: "transactions selected successfully!", transactions: @transactions }
     end
 
     def new
-
+        @transaction = Transaction.new
     end
 
     def create
+        @transaction = Transaction.new(transaction_params)
 
+        if @transaction.save
+            render json: { message: "Transaction created successfully!", transaction: @transaction }
+        else
+            render json: { error: @transaction.errors.full_messages }, status: :unprocessable_entity
+        end
+    end
+
+    private
+
+    def transaction_params
+        params.require(:transaction).permit(:user_id, :category_id, :amount, :comment)
     end
 end

@@ -2,7 +2,7 @@ class Api::V1::TransactionsController < ApplicationController
     skip_before_action :verify_authenticity_token
     def index
         user_id = params[:user_id]
-        @transactions = Transaction.where({user_id: user_id})
+        @transactions = Transaction.where({user_id: user_id}).order(:created_at ).reverse_order
         render json: { message: "transactions selected successfully!", transactions: @transactions }
     end
 

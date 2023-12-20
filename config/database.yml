@@ -85,6 +85,7 @@ test:
 #
 production:
   <<: *default
+  url: <%= ENV['DATABASE_URL'] %>
   database: mywalletdb_xr4o
   username: mywalletdb_xr4o_user
   password: <%= ENV["EXPENSE_TRACKER_BACKEND_DATABASE_PASSWORD"] %>

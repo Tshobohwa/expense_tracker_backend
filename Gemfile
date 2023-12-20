@@ -57,3 +57,4 @@ gem 'dotenv-rails', groups: [:development, :test]
 gem 'fast_jsonapi'
 
 gem 'active_model_serializers'
+
